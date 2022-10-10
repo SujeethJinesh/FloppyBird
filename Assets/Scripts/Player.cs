@@ -22,6 +22,14 @@ public class Player : MonoBehaviour
         InvokeRepeating(nameof(AnimateSprite),  0.15f, 0.15f);
     }
 
+    private void OnEnable()
+    {
+        Vector3 position = transform.position;
+        position.y = 0f;
+        transform.position = position;
+        direction = Vector3.zero;
+    }
+
     private void Update()
     {
         // TODO: May not want to have this and just do it based off touch ended.
@@ -58,5 +66,16 @@ public class Player : MonoBehaviour
         }
 
         spriteRenderer.sprite = sprites[spriteIndex];
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Obstacle")
+        {
+            FindObjectOfType<GameManager>().GameOver();
+        } else if (other.gameObject.tag == "Score")
+        {
+            FindObjectOfType<GameManager>().IncreaseScore();
+        }
     }
 }
